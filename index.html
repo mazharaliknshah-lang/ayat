@@ -1,0 +1,186 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ayat ✨</title>
+
+<style>
+body{
+  margin:0;
+  font-family:'Segoe UI',sans-serif;
+  background:linear-gradient(to bottom,#02030f,#0a0f2e,#02030f);
+  color:#fff;
+  text-align:center;
+}
+
+.moon{
+  position:fixed;
+  top:30px;
+  right:30px;
+  width:120px;
+  height:120px;
+  background:radial-gradient(circle,#fff,#dcdcdc);
+  border-radius:50%;
+  box-shadow:0 0 40px rgba(255,255,255,0.7);
+}
+
+.container{
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  padding:20px;
+}
+
+input{
+  padding:12px 20px;
+  border-radius:25px;
+  border:none;
+  outline:none;
+  font-size:16px;
+  text-align:center;
+}
+
+button{
+  margin-top:15px;
+  padding:10px 35px;
+  border-radius:25px;
+  border:none;
+  font-weight:bold;
+  cursor:pointer;
+}
+
+#error{
+  margin-top:15px;
+  color:#ffb6c1;
+  font-style:italic;
+}
+
+.hidden{display:none;}
+
+.card{
+  background:rgba(255,255,255,0.08);
+  padding:30px;
+  border-radius:20px;
+  max-width:420px;
+  margin:25px auto;
+  box-shadow:0 0 30px rgba(255,255,255,0.15);
+}
+
+.fade{
+  animation:fadeIn 2s ease forwards;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(20px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
+.final{
+  margin-top:90px;
+  font-size:20px;
+  line-height:1.6;
+  opacity:0.95;
+}
+
+.signature{
+  margin-top:40px;
+  font-size:14px;
+  opacity:0.6;
+}
+</style>
+</head>
+
+<body>
+
+<div class="moon"></div>
+
+<!-- LOCK SCREEN -->
+<div class="container" id="lock">
+  <h2>🔒 Private</h2>
+  <p>Sirf ek naam likhne par unlock hota hai ✨</p>
+  <input type="password" id="pass" placeholder="Enter name">
+  <button onclick="unlock()">Unlock</button>
+  <div id="error"></div>
+</div>
+
+<!-- CONTENT -->
+<div class="container hidden" id="content">
+
+  <div class="card fade">
+    <h1>Hi Ayat 🌙</h1>
+    <p>
+      Kuch log sirf baat karte hain…<br>
+      aur kuch log khamoshi mein bhi feel ho jate hain.<br><br>
+      Tum second type ho.
+    </p>
+  </div>
+
+  <div class="card fade">
+    <p>
+      Tumhari presence loud nahi hoti,<br>
+      lekin strong hoti hai.<br><br>
+      Jaise raat ka chand —<br>
+      bina pooche roshni de deta hai ✨
+    </p>
+  </div>
+
+  <div class="card fade">
+    <p>
+      Tumhara smile comfort deta hai,<br>
+      tumhari baatein yaad reh jati hain,<br>
+      aur tumhara naam…<br>
+      bina wajah dimagh mein aa jata hai.
+    </p>
+  </div>
+
+  <div class="card fade">
+    <p>
+      Yeh page koi show off nahi hai,<br>
+      koi pressure nahi,<br>
+      bas ek honest feeling hai —<br>
+      quietly, respectfully.
+    </p>
+  </div>
+
+  <!-- FINAL CLOSING -->
+  <div class="final fade">
+    <p>
+      I don’t know where life takes us,<br>
+      but one thing is clear —
+    </p>
+    <p>
+      <strong>
+      I would genuinely love<br>
+      to have you in my life, Ayat.
+      </strong>
+    </p>
+    <p>— 2026 ✨</p>
+  </div>
+
+  <div class="signature">
+    Agar tum yahan tak pohanchi ho,<br>
+    toh iska matlab yeh page sirf page nahi raha 💫
+  </div>
+
+</div>
+
+<script>
+function unlock(){
+  const p=document.getElementById("pass").value;
+  const e=document.getElementById("error");
+
+  if(p==="Ayat"){
+    document.getElementById("lock").classList.add("hidden");
+    document.getElementById("content").classList.remove("hidden");
+  }else{
+    e.innerHTML="Almost 😌<br>Lagta hai tum guesses mein bhi graceful ho ✨";
+  }
+}
+</script>
+
+</body>
+</html>

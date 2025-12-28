@@ -1,0 +1,425 @@
+ayat
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ayat's World - 2026 Loading...</title>
+    <!-- Google Fonts for Style -->
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
+    <style>
+        /* CSS STYLING START */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            color: #4a4a4a;
+            height: 100%;
+        }
+
+        .screen {
+            display: none;
+            height: 100vh;
+            width: 100%;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .active {
+            display: flex;
+            z-index: 10;
+        }
+
+        /* Login Screen */
+        #login-screen {
+            background: #ffdde1;
+        }
+        input {
+            padding: 15px;
+            border-radius: 30px;
+            border: 2px solid #ff6f91;
+            outline: none;
+            font-size: 18px;
+            width: 250px;
+            text-align: center;
+        }
+        .btn {
+            background: #ff6f91;
+            color: white;
+            padding: 10px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(255,111,145,0.4);
+            transition: transform 0.2s;
+        }
+        .btn:active { transform: scale(0.95); }
+
+        /* Quiz Screen */
+        .question-box {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            max-width: 90%;
+        }
+
+        /* Loading Screen */
+        .progress-bar {
+            width: 80%;
+            height: 20px;
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        .progress {
+            height: 100%;
+            width: 0%;
+            background: #ff6f91;
+            transition: width 0.5s;
+        }
+
+        /* Balloon Game */
+        .balloon {
+            width: 50px;
+            height: 70px;
+            background-color: #ff6f91;
+            border-radius: 50%;
+            position: absolute;
+            cursor: pointer;
+            animation: float 3s infinite ease-in-out alternate;
+        }
+        .balloon::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 24px;
+            width: 2px;
+            height: 20px;
+            background: #333;
+        }
+
+        /* Main World */
+        #main-world {
+            height: auto; /* Allow scrolling */
+            min-height: 100vh;
+            padding-bottom: 50px;
+            background: linear-gradient(to top, #a18cd1 0%, #fbc2eb 100%);
+            display: none; /* Hidden initially */
+            position: relative;
+        }
+
+        h1 { font-family: 'Pacifico', cursive; color: #fff; text-shadow: 2px 2px 4px rgba(0,0,0,0.2); font-size: 2.5em;}
+        
+        .sticker-container { display: flex; justify-content: center; gap: 20px; margin-bottom: 20px; }
+        .dancing-sticker { font-size: 40px; animation: bounce 1s infinite; }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 15px;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .gift-box {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .gift-box:hover { transform: scale(1.05); }
+        .gift-icon { font-size: 30px; display: block; margin-bottom: 5px; }
+        .month-label { font-size: 12px; font-weight: bold; color: #888; }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 80%;
+            animation: popIn 0.3s;
+        }
+        .close-btn {
+            margin-top: 15px;
+            background: #ff6f91;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Final Section */
+        .final-msg {
+            background: rgba(255,255,255,0.9);
+            margin: 20px;
+            padding: 20px;
+            border-radius: 15px;
+        }
+        .teaser { font-size: 14px; color: #555; font-style: italic; margin-top: 10px; }
+        
+        #no-btn { position: relative; transition: 0.2s; background: #555; }
+
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes float { 0% { transform: translateY(0); } 100% { transform: translateY(-20px); } }
+        @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
+    </style>
+</head>
+<body>
+
+    <!-- Hidden Music Player (Auto-plays if browser allows, otherwise needs one click) -->
+    <!-- Replacing with a hidden iframe for better compatibility -->
+    <iframe src="https://www.youtube.com/embed/S2pEAhwF7kM?autoplay=1&loop=1&playlist=S2pEAhwF7kM" allow="autoplay" style="display:none" id="bg-music"></iframe>
+
+    <!-- SCREEN 1: PASSWORD -->
+    <div id="login-screen" class="screen active">
+        <h1>Welcome to Ayat's World</h1>
+        <p>Enter the magic word to enter 🔐</p>
+        <input type="password" id="password" placeholder="Enter Password...">
+        <button class="btn" onclick="checkPassword()">Unlock</button>
+    </div>
+
+    <!-- SCREEN 2: GATEKEEPER QUIZ -->
+    <div id="quiz-screen" class="screen">
+        <h1>Wait! Security Check 🕵️‍♀️</h1>
+        <div class="question-box">
+            <h3 id="quiz-q">Who is the cutest person alive?</h3>
+            <button class="btn" onclick="nextQuiz(true)">Ayat (Me)</button>
+            <button class="btn" onclick="wrongAnswer()">You</button>
+        </div>
+    </div>
+
+    <!-- SCREEN 3: LOADING -->
+    <div id="loading-screen" class="screen">
+        <h2 id="loading-text">Analyzing Mood Swings...</h2>
+        <div class="progress-bar"><div class="progress" id="prog-bar"></div></div>
+    </div>
+
+    <!-- SCREEN 4: BALLOON POP GAME -->
+    <div id="game-screen" class="screen" style="background: #e0c3fc;">
+        <h1>Mission: Pop all Balloons! 🎈</h1>
+        <p>Clear the way for New Year 2026!</p>
+        <h3 id="balloon-count">Balloons Left: 15</h3>
+        <!-- Balloons will be generated by JS -->
+    </div>
+
+    <!-- SCREEN 5: MAIN WORLD (NEW YEAR) -->
+    <div id="main-world">
+        <br>
+        <h1>✨ Happy New Year 2026 ✨</h1>
+        <p style="color: white;">(Advance Celebration Mode: ON)</p>
+        
+        <div class="sticker-container">
+            <div class="dancing-sticker">💃</div>
+            <div class="dancing-sticker">🐱</div>
+            <div class="dancing-sticker">🐒</div>
+            <div class="dancing-sticker">🕺</div>
+        </div>
+
+        <p style="color: white; padding: 0 20px;">Open 12 boxes for 12 months of commitments!</p>
+
+        <!-- 12 GIFT BOXES -->
+        <div class="grid-container" id="gift-grid">
+            <!-- Boxes generated by JS -->
+        </div>
+
+        <!-- FINAL MESSAGE SECTION -->
+        <div class="final-msg">
+            <h2>❤️ Dear Ayat...</h2>
+            <p>Tumhare aane se meri duniya mein waqayi 'Ayat' (miracle) jaisa noor aa gaya hai. You are my favorite hello and my hardest goodbye.</p>
+            <br>
+            <div class="teaser">
+                "Lekin suno, itna hawa mein mat uro! Ye website isliye banayi hai taake 2026 mein tumhe yaad rahe ke tumhara remote control mere paas hai. Agle saal bhi tumhein mere boring jokes bardasht karne padenge aur return gift mein mujhe iPhone chahiye. Bahana nahi chalega!"
+            </div>
+            <br>
+            <h3>Do you accept this bond for 2026?</h3>
+            <button class="btn" onclick="alert('Yay! I knew it! Fireworks for you! 🎆')">YES! 😍</button>
+            <button class="btn" id="no-btn" onmouseover="moveButton()">NO 😒</button>
+        </div>
+    </div>
+
+    <!-- POPUP MODAL -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <h1 id="modal-icon" style="font-size: 50px;"></h1>
+            <p id="modal-text" style="font-size: 18px; font-weight: 600;"></p>
+            <div class="close-btn" onclick="closeModal()">Okay, I agree!</div>
+        </div>
+    </div>
+
+    <script>
+        // === CONFIGURATION ===
+        const passwordCorrect = "ayat";
+        
+        // 12 COMMITMENTS (TEASING & FUNNY)
+        const commitments = [
+            { month: "Jan", icon: "😸", text: "January: I promise to listen to your drama... but only for 5 minutes a day." },
+            { month: "Feb", icon: "🍫", text: "February: Valentine's pe chocolates tum khana, bill main bhar dunga (as always)." },
+            { month: "Mar", icon: "😤", text: "March: Jab tum gussa hogi, main tumhe pizza khila kar chup karaunga." },
+            { month: "Apr", icon: "🤡", text: "April: Main tumhare saare funny faces ke screenshots safe rakhunga for blackmail." },
+            { month: "May", icon: "🚗", text: "May: Long drive pe jayenge, lekin gaana meri pasand ka chalega." },
+            { month: "Jun", icon: "🍦", text: "June: Garmi mein tumhari ice-cream share nahi karunga. Apna alag lo." },
+            { month: "Jul", icon: "💤", text: "July: I promise to send 'Good Night' texts even if you fall asleep while chatting." },
+            { month: "Aug", icon: "🐒", text: "August: Chahe tum bandariya jesi harkatein karo, phir bhi I love you." },
+            { month: "Sep", icon: "📸", text: "September: I will be your personal photographer until you get the perfect DP." },
+            { month: "Oct", icon: "🧟‍♀️", text: "October: Subah uth ke tum zombie lagti ho, par main darrunga nahi." },
+            { month: "Nov", icon: "🧥", text: "November: Thand mein apni jacket de dunga, phir chahe main khud jam jaun." },
+            { month: "Dec", icon: "💍", text: "December: 2026 ke end tak, humara rishta aur bhi strong hoga (Hopefully tum sudhar jao)." }
+        ];
+
+        // === LOGIC ===
+        
+        function checkPassword() {
+            const input = document.getElementById('password').value.toLowerCase();
+            if (input === passwordCorrect) {
+                switchScreen('quiz-screen');
+            } else {
+                alert("Wrong password! Are you really Ayat?");
+            }
+        }
+
+        function switchScreen(id) {
+            document.querySelectorAll('.screen').forEach(s => {
+                s.style.opacity = 0;
+                setTimeout(() => s.classList.remove('active'), 500);
+            });
+            const target = document.getElementById(id);
+            setTimeout(() => {
+                target.classList.add('active');
+                target.style.opacity = 1;
+            }, 500);
+            
+            if(id === 'loading-screen') startLoading();
+            if(id === 'game-screen') startGame();
+        }
+
+        // Quiz Logic
+        let quizStep = 0;
+        function nextQuiz(isCorrect) {
+            if (isCorrect) {
+                quizStep++;
+                if (quizStep === 1) {
+                    document.getElementById('quiz-q').innerText = "Who is always right in an argument?";
+                    document.querySelectorAll('#quiz-screen button')[0].innerText = "Ayat";
+                    document.querySelectorAll('#quiz-screen button')[1].innerText = "Me (The Boy)";
+                } else {
+                    switchScreen('loading-screen');
+                }
+            }
+        }
+        function wrongAnswer() {
+            alert("Error! Wrong Answer. Try again (Hint: Pick Ayat)");
+        }
+
+        // Loading Logic
+        function startLoading() {
+            let width = 0;
+            const bar = document.getElementById('prog-bar');
+            const text = document.getElementById('loading-text');
+            const interval = setInterval(() => {
+                width += 2; // slow loading
+                bar.style.width = width + '%';
+                if (width === 30) text.innerText = "Calculating Cuteness Levels...";
+                if (width === 60) text.innerText = "Loading Funny Memories...";
+                if (width === 90) text.innerText = "Almost there...";
+                if (width >= 100) {
+                    clearInterval(interval);
+                    switchScreen('game-screen');
+                }
+            }, 100); // speed of loading
+        }
+
+        // Balloon Game Logic
+        let balloonsLeft = 15;
+        function startGame() {
+            const container = document.getElementById('game-screen');
+            for(let i=0; i<15; i++) {
+                let b = document.createElement('div');
+                b.className = 'balloon';
+                b.style.left = Math.random() * 80 + '%';
+                b.style.top = Math.random() * 80 + '%';
+                b.style.backgroundColor = getRandomColor();
+                b.onclick = function() {
+                    this.remove();
+                    balloonsLeft--;
+                    document.getElementById('balloon-count').innerText = "Balloons Left: " + balloonsLeft;
+                    if(balloonsLeft === 0) {
+                        launchMainWorld();
+                    }
+                };
+                container.appendChild(b);
+            }
+        }
+        function getRandomColor() {
+            const colors = ['#ff6f91', '#ff9671', '#ffc75f', '#f9f871', '#00d2fc'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        // Main World Launch
+        function launchMainWorld() {
+            document.getElementById('game-screen').classList.remove('active');
+            document.getElementById('main-world').style.display = 'block';
+            generateBoxes();
+        }
+
+        // Generate Boxes
+        function generateBoxes() {
+            const grid = document.getElementById('gift-grid');
+            commitments.forEach((item, index) => {
+                let box = document.createElement('div');
+                box.className = 'gift-box';
+                box.innerHTML = `<span class="gift-icon">${item.icon}</span><div class="month-label">${item.month}</div>`;
+                box.onclick = () => showModal(item);
+                grid.appendChild(box);
+            });
+        }
+
+        // Modal Logic
+        function showModal(item) {
+            document.getElementById('modal').style.display = 'flex';
+            document.getElementById('modal-icon').innerText = item.icon;
+            document.getElementById('modal-text').innerText = item.text;
+        }
+        function closeModal() {
+            document.getElementById('modal').style.display = 'none';
+        }
+
+        // Prank Button Logic
+        function moveButton() {
+            const btn = document.getElementById('no-btn');
+            const x = Math.random() * (window.innerWidth - 100);
+            const y = Math.random() * (window.innerHeight - 100);
+            btn.style.position = 'fixed';
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+        }
+
+    </script>
+</body>
+</html>
